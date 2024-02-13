@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    bootstrap-servers: <MY-NAMESPACE>.servicebus.windows.net:9093
+    properties:
+      sasl.mechanism: PLAIN
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://<MY-NAMESPACE>.servicebus.windows.net/;SharedAccessKeyName=<MY-KEYNAME>;SharedAccessKey=<MY-ACCESS-KEY>";
+      schema.registry.url: https://<MY-NAMESPACE>.servicebus.windows.net
+      schema.group: <MY-SCHEMA-GROUP>
+      specific.avro.reader: true
+      auto.register.schemas: false
+      use.latest.version: true
+

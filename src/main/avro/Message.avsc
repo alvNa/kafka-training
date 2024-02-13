@@ -1,0 +1,16 @@
+{
+  "namespace": "com.atradius.examples",
+  "type": "record",
+  "name": "Message",
+  "version": "1",
+  "fields": [
+    {
+      "name": "number",
+      "type": "int"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    }
+  ]
+}

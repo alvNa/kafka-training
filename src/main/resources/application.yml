@@ -1,0 +1,25 @@
+management:
+  server:
+    port: 8081
+
+spring:
+  application:
+    name: event-publisher-service
+  kafka:
+    bootstrap-servers: localhost:9092
+    security:
+      protocol: PLAINTEXT
+    topics: demo-topic
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+    consumer:
+      group-id: message-consumer
+      key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-deserializer: io.confluent.kafka.serializers.KafkaAvroDeserializer
+      properties:
+        specific.avro.reader: true
+    properties:
+      schema.registry.url: http://localhost:8081
+      log.dirs: "target/kafka-logs"
+
