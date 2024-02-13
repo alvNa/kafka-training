@@ -51,8 +51,3 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'  # not necessary, added for tests
       KAFKA_CLUSTERS_0_AUDIT_TOPICAUDITENABLED: 'true'
       KAFKA_CLUSTERS_0_AUDIT_CONSOLEAUDITENABLED: 'true'
-#      KAFKA_CLUSTERS_1_NAME: Azure Event Hubs
-#      KAFKA_CLUSTERS_1_BOOTSTRAPSERVERS: atradius-training.servicebus.windows.net:9093
-#      KAFKA_CLUSTERS_1_PROPERTIES_SECURITY_PROTOCOL: SASL_SSL
-#      KAFKA_CLUSTERS_1_PROPERTIES_SASL_MECHANISM: PLAIN
-#      KAFKA_CLUSTERS_1_PROPERTIES_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="$$ConnectionString" password="Endpoint=sb://atradius-training.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=X3ij4WwPfa0JU9VTHQU71lhwTBOXOec3J+AEhHsk4x0=";'

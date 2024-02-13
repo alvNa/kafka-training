@@ -1,2 +1,4 @@
-package com.atradius.config;public class KafkaConfig {
+package com.atradius.config;
+
+public class KafkaConfig {
 }
