@@ -51,8 +51,9 @@ public class KafkaRegistryService {
         //InputStream stdin = Files.newInputStream(msgResourceFile.getFile().toPath(), StandardOpenOption.READ);
         //jsonToBinaryFragmentTool.run(stdin,null,null,null);
         //var path = "/Users/AlvaroNav/Documents/github-alvNa/spring-kafka-demo/src/main/avro/Message.avsc";
-        var path = "/Users/AlvaroNav/Documents/github-alvNa/spring-kafka-demo/src/main/resources/data/message-1.json";
-        jsonToBinary(JSON, AVRO, "--schema-file", path);
+        //var path = "/Users/AlvaroNav/Documents/github-alvNa/spring-kafka-demo/src/main/resources/data/message-1.json";
+        //jsonToBinary(JSON, AVRO, "--schema-file", path);
+        jsonToBinary(jsonResponse, AVRO, schema);
 
     }
 
