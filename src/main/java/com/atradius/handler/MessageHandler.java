@@ -1,4 +1,4 @@
-package com.atradius;
+package com.atradius.handler;
 
 import com.atradius.examples.Message;
 import lombok.extern.slf4j.Slf4j;

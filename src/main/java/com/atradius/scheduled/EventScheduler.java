@@ -15,7 +15,7 @@ public class EventScheduler {
     private final ProducerService producerService;
     private final AtomicInteger messageIndex = new AtomicInteger(0);
 
-    @Scheduled(fixedRate = 3000)
+    //@Scheduled(fixedRate = 3000)
     void sendMessages() {
         var msg = new Message(messageIndex.get(), "Hello world " + messageIndex.getAndIncrement() + " !");
         producerService.send(msg);

@@ -45,19 +45,19 @@ services:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka:29092'
       SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
 
-  kafka-ui:
-    container_name: kafka-ui
-    image: provectuslabs/kafka-ui:latest
-    ports:
-      - 9080:8080
-    depends_on:
-      - kafka
-      - schema-registry
-    environment:
-      KAFKA_CLUSTERS_0_NAME: local
-      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
-      KAFKA_CLUSTERS_0_METRICS_PORT: 9101
-      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
-      DYNAMIC_CONFIG_ENABLED: 'true'  # not necessary, added for tests
-      KAFKA_CLUSTERS_0_AUDIT_TOPICAUDITENABLED: 'true'
-      KAFKA_CLUSTERS_0_AUDIT_CONSOLEAUDITENABLED: 'true'
+#  kafka-ui:
+#    container_name: kafka-ui
+#    image: provectuslabs/kafka-ui:latest
+#    ports:
+#      - 9080:8080
+#    depends_on:
+#      - kafka
+#      - schema-registry
+#    environment:
+#      KAFKA_CLUSTERS_0_NAME: local
+#      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+#      KAFKA_CLUSTERS_0_METRICS_PORT: 9101
+#      KAFKA_CLUSTERS_0_SCHEMAREGISTRY: http://schema-registry:8081
+#      DYNAMIC_CONFIG_ENABLED: 'true'  # not necessary, added for tests
+#      KAFKA_CLUSTERS_0_AUDIT_TOPICAUDITENABLED: 'true'
+#      KAFKA_CLUSTERS_0_AUDIT_CONSOLEAUDITENABLED: 'true'
