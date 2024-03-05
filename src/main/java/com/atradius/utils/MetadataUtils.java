@@ -8,12 +8,21 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.apache.kafka.common.header.Headers;
+import org.slf4j.Logger;
+
+import static com.atradius.utils.HeaderConstants.EVENT_NAME;
+
 public final class MetadataUtils {
+
+  public static final String WARN_MESSAGE = "Don't forget to add it to the custom event metadata using the kafka headers";
+  public static final String HEADER_NOT_FOUND = "{} not found!";
+
   private MetadataUtils() {}
 
   public static <K, V> ProducerRecord<K, V> addCustomMetadata(
       final ProducerRecord<K, V> record, final Metadata metadata) {
-    record.headers().add(HeaderConstants.EVENT_NAME, metadata.eventName().getBytes());
+    record.headers().add(EVENT_NAME, metadata.eventName().getBytes());
     record.headers().add(HeaderConstants.EVENT_DOMAIN, metadata.eventDomain().getBytes());
     record.headers().add(HeaderConstants.EVENT_TYPE, metadata.eventType().getBytes());
     String correlationId = computeCorrelationIdIfAbsent(metadata.correlationId()).toString();
@@ -22,10 +31,21 @@ public final class MetadataUtils {
     return record;
   }
 
+  public static void printEventMetadataLogs(Logger log, Headers headers) {
+    var eventNameIterator = headers.headers(EVENT_NAME).iterator();
+    if (!eventNameIterator.hasNext()) {
+      log.warn(HEADER_NOT_FOUND + WARN_MESSAGE, EVENT_NAME);
+    }
+    else{
+      var eventName = bytesToString(eventNameIterator.next().value());
+      log.info("Event Name is {}", eventName);
+    }
+  }
+
   public static Metadata getCustomMetadata(Map<String, Object> headers) {
     var metadataBuilder = Metadata.builder();
-    if (headers.containsKey(HeaderConstants.EVENT_NAME)) {
-      String eventName = bytesToString((byte[])headers.get(HeaderConstants.EVENT_NAME));
+    if (headers.containsKey(EVENT_NAME)) {
+      String eventName = bytesToString((byte[])headers.get(EVENT_NAME));
       metadataBuilder.eventName(eventName);
     }
 
