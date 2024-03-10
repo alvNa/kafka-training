@@ -19,5 +19,7 @@ public class EventScheduler {
     void sendMessages() {
         var msg = new Message(messageIndex.get(), "Hello world " + messageIndex.getAndIncrement() + " !");
         producerService.send(msg);
+        var msg2 = new Message(messageIndex.get(), "Hola mundo!" + messageIndex.getAndIncrement() + " !");
+        producerService.send2(msg2);
     }
 }

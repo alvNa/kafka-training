@@ -1,8 +1,6 @@
 package com.atradius.handler;
 
 import com.atradius.examples.Message;
-import com.atradius.handler.annotation.EventMetadata;
-import com.atradius.model.Metadata;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Headers;

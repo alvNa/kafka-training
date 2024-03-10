@@ -38,6 +38,15 @@ public class ProducerService {
         return kafkaTemplate.send(producerRecord);
     }
 
+    @SetEventMetadata(eventName = "my-event-updated", domain = "sc2", subdomain = "platform2")
+    public Future<SendResult<String, Message>> send2(Message value) {
+        var producerRecord = new ProducerRecord<String,Message>(topicName, null, value);
+        var metadata = getMetadata();
+        //addCustomMetadata(producerRecord, metadata);
+        return kafkaTemplate.send(producerRecord);
+    }
+
+
     private static Metadata getMetadata() {
         return Metadata.builder()
                 .eventName(BUYER_PI_READY)
