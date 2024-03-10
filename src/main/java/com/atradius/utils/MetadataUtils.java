@@ -24,9 +24,10 @@ public final class MetadataUtils {
       final ProducerRecord<K, V> record, final Metadata metadata) {
     record.headers().add(EVENT_NAME, metadata.eventName().getBytes());
     record.headers().add(HeaderConstants.EVENT_DOMAIN, metadata.eventDomain().getBytes());
-    record.headers().add(HeaderConstants.EVENT_TYPE, metadata.eventType().getBytes());
-    String correlationId = computeCorrelationIdIfAbsent(metadata.correlationId()).toString();
-    record.headers().add(HeaderConstants.EVENT_CORRELATION_ID, correlationId.getBytes());
+    record.headers().add(HeaderConstants.EVENT_SUBDOMAIN, metadata.eventSubdomain().getBytes());
+//    record.headers().add(HeaderConstants.EVENT_TYPE, metadata.eventType().getBytes());
+//    String correlationId = computeCorrelationIdIfAbsent(metadata.correlationId()).toString();
+//    record.headers().add(HeaderConstants.EVENT_CORRELATION_ID, correlationId.getBytes());
 
     return record;
   }
@@ -51,6 +52,10 @@ public final class MetadataUtils {
 
     if (headers.containsKey(HeaderConstants.EVENT_DOMAIN)) {
       metadataBuilder.eventDomain(bytesToString((byte[])headers.get(HeaderConstants.EVENT_DOMAIN)));
+    }
+
+    if (headers.containsKey(HeaderConstants.EVENT_SUBDOMAIN)) {
+      metadataBuilder.eventSubdomain(bytesToString((byte[])headers.get(HeaderConstants.EVENT_SUBDOMAIN)));
     }
 
     if (headers.containsKey(HeaderConstants.EVENT_TYPE)) {

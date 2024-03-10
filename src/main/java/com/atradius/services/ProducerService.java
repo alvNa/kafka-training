@@ -1,6 +1,7 @@
 package com.atradius.services;
 
 import com.atradius.examples.Message;
+import com.atradius.handler.annotation.SetEventMetadata;
 import com.atradius.model.Metadata;
 import com.atradius.utils.ActionTypesConstants;
 import com.atradius.utils.DomainConstants;
@@ -29,10 +30,11 @@ public class ProducerService {
 
     private final KafkaTemplate<String, Message> kafkaTemplate;
 
+    @SetEventMetadata(eventName = "my-event-created", domain = "sc", subdomain = "platform")
     public Future<SendResult<String, Message>> send(Message value) {
         var producerRecord = new ProducerRecord<String,Message>(topicName, null, value);
         var metadata = getMetadata();
-        addCustomMetadata(producerRecord, metadata);
+        //addCustomMetadata(producerRecord, metadata);
         return kafkaTemplate.send(producerRecord);
     }
 

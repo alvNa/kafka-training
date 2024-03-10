@@ -10,6 +10,7 @@ import java.util.UUID;
 public record Metadata(
     String eventName,
     String eventDomain,
+    String eventSubdomain,
     String eventType,
     Optional<String> origin,
     Optional<UUID> correlationId) {}

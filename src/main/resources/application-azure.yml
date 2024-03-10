@@ -7,6 +7,6 @@ spring:
       schema.registry.url: https://<MY-NAMESPACE>.servicebus.windows.net
       schema.group: <MY-SCHEMA-GROUP>
       specific.avro.reader: true
-      auto.register.schemas: false
+      #auto.register.schemas: false
       use.latest.version: true
 
