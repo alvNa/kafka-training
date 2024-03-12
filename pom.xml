@@ -36,6 +36,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
 
 <!--        <dependency>-->
 <!--            <groupId>org.springframework</groupId>-->
@@ -60,11 +64,11 @@
             <artifactId>kafka-avro-serializer</artifactId>
             <version>${kafka-confluent.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.azure.spring</groupId>
-            <artifactId>spring-cloud-azure-starter</artifactId>
-            <version>5.7.0</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.azure.spring</groupId>-->
+<!--            <artifactId>spring-cloud-azure-starter</artifactId>-->
+<!--            <version>5.7.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>

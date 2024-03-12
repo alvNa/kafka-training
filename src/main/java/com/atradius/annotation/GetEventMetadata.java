@@ -1,10 +1,10 @@
-package com.atradius.handler.annotation;
+package com.atradius.annotation;
 
 import java.lang.annotation.*;
 
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface EventMetadata {
+public @interface GetEventMetadata {
 
 }

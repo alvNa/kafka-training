@@ -1,6 +1,6 @@
 package com.atradius.config;
 
-import com.atradius.aop.EventMetadataInterceptor;
+import com.atradius.producer.EventMetadataInterceptor;
 import io.confluent.kafka.serializers.KafkaAvroSerializerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -8,12 +8,14 @@ import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 
 import java.util.Map;
 
+@EnableAspectJAutoProxy
 @Configuration
 public class KafkaConfig<K,V> {
     /** Bean name of Event Library Event Kafka Template */
@@ -40,7 +42,8 @@ public class KafkaConfig<K,V> {
     @ConditionalOnMissingBean(name = AVRO_KAFKA_TEMPLATE)
     public KafkaTemplate<K, V> avroKafkaTemplate(
             final KafkaProperties properties,
-            /*@Qualifier(AVRO_PRODUCER_FACTORY)*/ final ProducerFactory<K, V> kafkaProducerFactory) {
+            /*@Qualifier(AVRO_PRODUCER_FACTORY)*/ final ProducerFactory<K, V> kafkaProducerFactory,
+            EventMetadataInterceptor eventMetadataInterceptor) {
         final PropertyMapper map = PropertyMapper.get().alwaysApplyingWhenNonNull();
 
         final KafkaTemplate<K, V> kafkaTemplate = new KafkaTemplate<>(kafkaProducerFactory);
@@ -49,9 +52,17 @@ public class KafkaConfig<K,V> {
                 .to(kafkaTemplate::setTransactionIdPrefix);
 
         kafkaTemplate.setObservationEnabled(true);
+        kafkaTemplate.setProducerInterceptor(eventMetadataInterceptor);
 
         return kafkaTemplate;
     }
+
+  public static final String KAFKA_TEMPLATE_INTERCEPTOR = "kafkaTemplateInterceptor";
+
+  @Bean(name = KAFKA_TEMPLATE_INTERCEPTOR)
+  public EventMetadataInterceptor eventMetadataInterceptor() {
+    return new EventMetadataInterceptor();
+  }
 
 //    @Bean
 //    public ConcurrentKafkaListenerContainerFactory<K,V> kafkaListenerContainerFactory(final KafkaProperties properties) {

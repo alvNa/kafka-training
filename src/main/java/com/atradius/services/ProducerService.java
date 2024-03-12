@@ -1,7 +1,7 @@
 package com.atradius.services;
 
 import com.atradius.examples.Message;
-import com.atradius.handler.annotation.SetEventMetadata;
+import com.atradius.annotation.SetEventMetadata;
 import com.atradius.model.Metadata;
 import com.atradius.utils.ActionTypesConstants;
 import com.atradius.utils.DomainConstants;
@@ -18,7 +18,6 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import static com.atradius.utils.EventNames.BUYER_PI_READY;
-import static com.atradius.utils.MetadataUtils.addCustomMetadata;
 
 @Service
 @RequiredArgsConstructor

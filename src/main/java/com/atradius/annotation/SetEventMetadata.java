@@ -1,4 +1,4 @@
-package com.atradius.handler.annotation;
+package com.atradius.annotation;
 
 import java.lang.annotation.*;
 
