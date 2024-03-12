@@ -17,9 +17,11 @@ public class EventScheduler {
 
     @Scheduled(fixedRate = 3000)
     void sendMessages() {
-        var msg = new Message(messageIndex.get(), "Hello world " + messageIndex.getAndIncrement() + " !");
-        producerService.send(msg);
-        var msg2 = new Message(messageIndex.get(), "Hola mundo!" + messageIndex.getAndIncrement() + " !");
-        producerService.send2(msg2);
+//        var msg = new Message(messageIndex.get(), "Hello world" + messageIndex.getAndIncrement() + " !");
+//        producerService.send(msg);
+//        var msg2 = new Message(messageIndex.get(), "Hola mundo" + messageIndex.getAndIncrement() + " !");
+//        producerService.send2(msg2);
+        var msg3 = new Message(messageIndex.get(), "Ciao mondo" + messageIndex.getAndIncrement() + " !");
+        producerService.send3(msg3);
     }
 }

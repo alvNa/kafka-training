@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +20,8 @@ import java.util.UUID;
 import java.util.concurrent.Future;
 
 import static com.atradius.utils.EventNames.BUYER_PI_READY;
+import static com.atradius.utils.HeaderConstants.*;
+import static com.atradius.utils.MetadataUtils.addEventMetadata;
 
 @Service
 @RequiredArgsConstructor
@@ -29,22 +33,30 @@ public class ProducerService {
 
     private final KafkaTemplate<String, Message> kafkaTemplate;
 
-    @SetEventMetadata(eventName = "my-event-created", domain = "sc", subdomain = "platform")
     public Future<SendResult<String, Message>> send(Message value) {
         var producerRecord = new ProducerRecord<String,Message>(topicName, null, value);
         var metadata = getMetadata();
-        //addCustomMetadata(producerRecord, metadata);
+        addEventMetadata(producerRecord.headers(), metadata);
         return kafkaTemplate.send(producerRecord);
     }
 
     @SetEventMetadata(eventName = "my-event-updated", domain = "sc2", subdomain = "platform2")
     public Future<SendResult<String, Message>> send2(Message value) {
         var producerRecord = new ProducerRecord<String,Message>(topicName, null, value);
-        var metadata = getMetadata();
-        //addCustomMetadata(producerRecord, metadata);
         return kafkaTemplate.send(producerRecord);
     }
 
+    public Future<SendResult<String, Message>> send3(Message value) {
+        org.springframework.messaging.Message<Message> message = MessageBuilder
+                .withPayload(value)
+                .setHeader(KafkaHeaders.TOPIC, topicName)
+                .setHeader(EVENT_NAME, BUYER_PI_READY)
+                .setHeader(EVENT_DOMAIN, DomainConstants.CREDIT_INSURANCE)
+                .setHeader(EVENT_SUBDOMAIN, ActionTypesConstants.NOTIFICATION)
+                .build();
+
+        return kafkaTemplate.send(message);
+    }
 
     private static Metadata getMetadata() {
         return Metadata.builder()
