@@ -48,10 +48,11 @@ public class MessageHandler {
         log.info("Received event offset: {}", timestamp);
     }
 
-//    @KafkaListener(topics = "${spring.kafka.topics}", groupId = "consumer-2")
-//    void consumeMessagesGroup2(final Message msg, @Headers Map<String, Object> headers,
-//                               @GetEventMetadata Metadata eventMetadata) {
-//        log.info("Message received: {}", msg);
-//        log.info("Received event metadata: {}", eventMetadata);
-//    }
+    @KafkaListener(topics = "${spring.kafka.topics}", groupId = "consumer-2")
+    void consumeMessagesGroup2(//@GetEventMetadata Metadata eventMetadata,
+                               @Payload final Message msg,
+                               @Headers Map<String, Object> headers) {
+        log.info("Message received: {}", msg);
+        log.info("Received event metadata: {}", headers);
+    }
 }
