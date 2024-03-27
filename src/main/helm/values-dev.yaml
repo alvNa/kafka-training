@@ -1,0 +1,105 @@
+# Default values for helm.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: <MY-REPO>
+  pullPolicy: Always
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: { }
+
+podSecurityContext: { }
+
+securityContext: { }
+
+service:
+  type: ClusterIP
+  port: 80
+
+serviceAccount:
+  create: true
+
+  labels:
+    azure.workload.identity/use: "true"
+
+  annotations:
+    azure.workload.identity/client-id: <MY-CLIENT-ID>
+  name: <MY-SERVICE-ACCOUNT>
+  binding:
+    roleName: "aks-service"
+
+container:
+  port: 8080
+  managementPort: 8081
+  context: ""
+
+ingress:
+  enabled: true
+  className: nginx
+  host: <MY-HOST>
+  annotations:
+    nginx.ingress.kubernetes.io/x-forwarded-prefix: <MY-PREFIX>
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+  http:
+    paths:
+      - path: <MY-PATH>(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: <MY-SERVICE>
+            port:
+              number: 80
+deployment:
+  template:
+    labels:
+      custom.log.label: json
+      azure.workload.identity/use: "true"
+  spec:
+    revisionHistoryLimit: 1
+  container:
+    env:
+      - name: spring.profiles.active
+        value: azure,docker
+      - name: EventHubNamespace
+        value: <MY-EVENT-HUB-NS>
+      - name: AzureIdentityTokenCredential
+        value: <MY-TOKEN-CRED>
+      - name: TenantId
+        value: <MY-SCHEMA-ID>
+      - name: SchemaGroup
+        value: <MY-SCHEMA-GROUP>
+      - name: ENVIRONMENT
+        value: dev
+    volumeMounts:
+      - name: config-mnt
+        mountPath: <MY-MOUNT-PATH>
+        readOnly: true
+      - name: secret-mnt
+        mountPath: <MY-MOUNT-PATH>
+        readOnly: true
+  volumes:
+    - name: config-mnt
+      configMap:
+        name: <MY-CONFIG-MAP>
+
+
+resources: { }
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+
+nodeSelector: { }
+
+tolerations: [ ]
+
+affinity: { }

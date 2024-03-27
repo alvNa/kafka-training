@@ -22,4 +22,3 @@ spring:
     properties:
       schema.registry.url: http://localhost:8081
       log.dirs: "target/kafka-logs"
-

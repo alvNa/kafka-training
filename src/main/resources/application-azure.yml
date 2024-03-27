@@ -1,12 +1,24 @@
 spring:
   kafka:
-    bootstrap-servers: <MY-NAMESPACE>.servicebus.windows.net:9093
+    bootstrap-servers: ${EventHubNamespace}.servicebus.windows.net:9093
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: com.microsoft.azure.schemaregistry.kafka.avro.KafkaAvroSerializer
     properties:
       sasl.mechanism: PLAIN
       sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="$ConnectionString" password="Endpoint=sb://<MY-NAMESPACE>.servicebus.windows.net/;SharedAccessKeyName=<MY-KEYNAME>;SharedAccessKey=<MY-ACCESS-KEY>";
-      schema.registry.url: https://<MY-NAMESPACE>.servicebus.windows.net
-      schema.group: <MY-SCHEMA-GROUP>
-      specific.avro.reader: true
+      schema.registry.url: https://${EventHubNamespace}.servicebus.windows.net
+      schema.group: ${SchemaGroup}
+      use.managed.identity: true
+      managed.identity.clientId: ${AzureIdentityTokenCredential}
       auto.register.schemas: false
       use.latest.version: true
+
+app:
+  eventhub:
+    namespace: ${EventHubNamespace:demo-ns}
+    schema-registry:
+      group: ${SchemaGroup:demo-group}
+      name: ${SchemaName:demo-schema}
+
 

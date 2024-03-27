@@ -1,7 +1,7 @@
 {
   "namespace": "com.atradius.examples",
   "type": "record",
-  "name": "Message",
+  "name": "Tweet",
   "version": "1",
   "fields": [
     {

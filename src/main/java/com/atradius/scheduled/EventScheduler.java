@@ -1,6 +1,6 @@
 package com.atradius.scheduled;
 
-import com.atradius.examples.Message;
+import com.atradius.examples.Tweet;
 import com.atradius.services.ProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +17,7 @@ public class EventScheduler {
 
     @Scheduled(fixedRate = 3000)
     void sendMessages() {
-        var msg = new Message(messageIndex.get(), "Hello world " + messageIndex.getAndIncrement() + " !");
+        var msg = new Tweet(messageIndex.get(), "Hello world " + messageIndex.getAndIncrement() + " !");
         producerService.send(msg);
     }
 }
