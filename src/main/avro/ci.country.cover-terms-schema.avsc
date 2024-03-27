@@ -1,0 +1,21 @@
+{
+  "namespace": "ci.country",
+  "type": "record",
+  "name": "CoverTerms",
+  "version": "1",
+  "fields": [
+    {
+      "name": "countryId",
+      "type": "int"
+    },
+    {
+      "name": "termType",
+      "type": "string"
+    },
+    {
+      "name": "termValue",
+      "type": "boolean"
+    }
+  ]
+}
+

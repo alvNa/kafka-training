@@ -64,6 +64,16 @@
             <artifactId>kafka-avro-serializer</artifactId>
             <version>${kafka-confluent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.azure.spring</groupId>
+            <artifactId>spring-cloud-azure-starter</artifactId>
+            <version>5.7.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-data-schemaregistry-apacheavro</artifactId>
+            <version>1.1.14</version>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.azure.spring</groupId>-->
 <!--            <artifactId>spring-cloud-azure-starter</artifactId>-->
