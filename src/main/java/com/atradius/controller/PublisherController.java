@@ -24,7 +24,7 @@ public class PublisherController {
     private final SchemaRegistryAsyncClient schemaRegistryClient;
 
     @GetMapping("/hello")
-      public ResponseEntity<String> hello() {
+    public ResponseEntity<String> hello() {
         log.info("Hello endpoint hit!");
         log.info(schemaRegistryClient.getFullyQualifiedNamespace());
         log.info(
@@ -40,5 +40,5 @@ public class PublisherController {
                         .block())
                 .getDefinition());
         return ResponseEntity.ok("hello");
-      }
+    }
 }
