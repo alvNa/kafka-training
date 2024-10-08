@@ -1,0 +1,9 @@
+{
+    "name":"file_source_connector",
+    "config": {
+        "connector.class": "org.apache.kafka.connect.file.FileStreamSourceConnector",
+        "topic": "topic_connect",
+        "file": "/home/user/entrada.txt",
+        "value.converter": "org.apache.kafka.connect.storage.StringConverter"
+    }
+ }

@@ -1,0 +1,10 @@
+{
+  "name":"ftp_source_connector",
+  "config": {
+    "connector.class": "io.confluent.connect.ftps.FtpsSourceConnector",
+    "kafka.topic": "topic_connect",
+    "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "value.converter": "org.apache.kafka.connect.storage.StringConverter",
+    "tasks.max": 3
+  }
+}

@@ -1,0 +1,21 @@
+
+
+name=FTPSConnector
+connector.class=io.confluent.connect.ftps.FtpsSourceConnector
+key.converter=org.apache.kafka.connect.storage.StringConverter
+value.converter=org.apache.kafka.connect.storage.StringConverter
+tasks.max=3
+kafka.topic=<kafka-topic>
+confluent.topic.bootstrap.servers=localhost:9092
+confluent.topic.replication.factor=1
+confluent.license=<License. Leave it empty for evaluation license>
+batch.size=100
+ftps.input.path=<Path to files on the server>
+ftps.host=<host-address>
+ftps.username=<username>
+ftps.password=<password>
+ftps.ssl.key.password=<password>
+ftps.ssl.keystore.location=<path-to-keystore>
+ftps.ssl.keystore.password=<password>
+ftps.ssl.truststore.location=<path-to-truststore>
+ftps.ssl.truststore.password=<password>

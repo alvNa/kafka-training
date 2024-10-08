@@ -1,6 +1,6 @@
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.1
+    image: confluentinc/cp-zookeeper:latest
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -10,7 +10,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   kafka:
-    image: confluentinc/cp-kafka:7.5.1
+    image: confluentinc/cp-kafka:latest
     hostname: kafka
     container_name: kafka
     depends_on:
@@ -33,7 +33,7 @@ services:
       KAFKA_JMX_OPTS: -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=kafka0 -Dcom.sun.management.jmxremote.rmi.port=9101
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.5.1
+    image: confluentinc/cp-schema-registry:latest
     hostname: schema-registry
     container_name: schema-registry
     depends_on:
@@ -61,3 +61,86 @@ services:
       DYNAMIC_CONFIG_ENABLED: 'true'  # not necessary, added for tests
       KAFKA_CLUSTERS_0_AUDIT_TOPICAUDITENABLED: 'true'
       KAFKA_CLUSTERS_0_AUDIT_CONSOLEAUDITENABLED: 'true'
+
+#  rest-proxy:
+#    image: confluentinc/cp-kafka-rest:latest
+#    depends_on:
+#      - kafka
+#      #- schema-registry
+#    ports:
+#      - 8082:8082
+#    hostname: rest-proxy
+#    container_name: rest-proxy
+#    environment:
+#      KAFKA_REST_HOST_NAME: rest-proxy
+#      KAFKA_REST_BOOTSTRAP_SERVERS: 'kafka:29092'
+#      KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+#      #KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+
+  connect:
+    image: confluentinc/cp-kafka-connect:latest
+    restart: always
+    container_name: connect
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+      - schema-registry
+    volumes:
+      - /Users/AlvaroNav/code/kafka/kafka-connectors:/usr/share/confluent-hub-components/
+    environment:
+      CONNECT_REST_PORT: 8083      # Configure the Connect workers to use SASL/PLAIN.
+      #CONNECT_BOOTSTRAP_SERVERS: atradius-training.servicebus.windows.net:9093
+      CONNECT_BOOTSTRAP_SERVERS: 'kafka:29092'
+      #CONNECT_SASL_MECHANISM: PLAIN
+      #CONNECT_SECURITY_PROTOCOL: SASL_SSL
+      #CONNECT_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="$$ConnectionString" password="Endpoint=sb://atradius-training.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=X3ij4WwPfa0JU9VTHQU71lhwTBOXOec3J+AEhHsk4x0=";'
+
+      # producer
+      #CONNECT_PRODUCER_SASL_MECHANISM: PLAIN
+      #CONNECT_PRODUCER_SECURITY_PROTOCOL: SASL_SSL
+      #CONNECT_PRODUCER_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="$$ConnectionString" password="Endpoint=sb://atradius-training.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=X3ij4WwPfa0JU9VTHQU71lhwTBOXOec3J+AEhHsk4x0=";'
+
+      # consumer
+      #CONNECT_CONSUMER_SASL_MECHANISM: PLAIN
+      #CONNECT_CONSUMER_SECURITY_PROTOCOL: SASL_SSL
+      #CONNECT_CONSUMER_SASL_JAAS_CONFIG: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="$$ConnectionString" password="Endpoint=sb://atradius-training.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=X3ij4WwPfa0JU9VTHQU71lhwTBOXOec3J+AEhHsk4x0=";'
+
+      CONNECT_GROUP_ID: "connect"
+      CONNECT_CONFIG_STORAGE_TOPIC: "connect-config"
+      CONNECT_OFFSET_STORAGE_TOPIC: "connect-offsets"
+      CONNECT_STATUS_STORAGE_TOPIC: "connect-status"
+      CONNECT_REPLICATION_FACTOR: 1
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.converters.IntegerConverter"
+      CONNECT_VALUE_CONVERTER: "io.confluent.connect.avro.AvroConverter"
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+#      CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+#      CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+      CONNECT_PLUGIN_PATH: '/usr/share/java,/usr/share/confluent-hub-components/,/data/connect-jars'
+      CONNECT_REST_ADVERTISED_HOST_NAME: "connect"
+
+  ftp-server:
+    image: stilliard/pure-ftpd:latest
+    container_name: pure-ftpd
+    ports:
+      - "21:21"
+      - "30000-30009:30000-30009"
+    volumes: # remember to replace /folder_on_disk/ with the path to where you want to store the files on the host machine
+      - "./target/data:/home/username/"
+      - "./target/passwd:/etc/pure-ftpd/passwd"
+    # uncomment for ssl/tls, see https://github.com/stilliard/docker-pure-ftpd#tls
+    #      - "/folder_on_disk/ssl:/etc/ssl/private/"
+    # or ssl/tls with Let's Encrypt (cert and key as two files)
+    #      - "/etc/letsencrypt/live/<your_server>/cert.pem:/etc/ssl/private/pure-ftpd-cert.pem"
+    #      - "/etc/letsencrypt/live/<your_server>/privkey.pem:/etc/ssl/private/pure-ftpd-key.pem"
+    environment:
+      PUBLICHOST: "localhost"
+      FTP_USER_NAME: username
+      FTP_USER_PASS: mypass
+      FTP_USER_HOME: /home/username
+    # also for ssl/tls:
+    #      ADDED_FLAGS: "--tls=2"
+    restart: always
